@@ -49,17 +49,29 @@ module.exports = {
       last_name = '${lastName}',
       email = '${email}',
       phone_number = ${phoneNumber}
-      WHERE user_id = ${userId}
+      WHERE user_id = ${userId};
 
       UPDATE cc_clients
       SET address = '${address}',
       city = '${city}',
       state = '${state}',
       zip_code = ${zipCode}
-      WHERE user_id = ${userId}
+      WHERE user_id = ${userId};
     `
       )
       .then(() => res.sendStatus(200))
+      .catch((err) => console.log(err));
+  },
+  getUserAppt: (req, res) => {
+    sequelize
+      .query(
+        `
+      SELECT * FROM cc_appointments
+      WHERE client_id = ${clientId}
+      ORDER BY date DESC;
+    `
+      )
+      .then((dbRes) => res.status(200).send(dbRes[0]))
       .catch((err) => console.log(err));
   },
 };
